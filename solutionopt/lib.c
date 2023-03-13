@@ -2,27 +2,20 @@
 #include "stdbool.h"
 
 __attribute__((visibility("hidden")))
-bool direct_call = false;
-
-__attribute__((visibility("hidden")))
 void message_impl()
 {
     puts("lib.c: message_impl");
 }
 
-extern void internal_message()
-{
-    direct_call = true;
-    puts("lib.c: internal_message -> message_impl");
-    message_impl();
-}
+__attribute__((weak))
+extern void override_message();
 
 extern void message()
 {
-    if (!direct_call)
+    if (override_message != NULL)
     {
-        puts("lib.c: message -> internal_message");
-        internal_message();
+        puts("lib.c: message -> override_message");
+        override_message();
         return;
     }
     puts("lib.c: message -> message_impl");

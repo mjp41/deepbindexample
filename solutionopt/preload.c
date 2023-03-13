@@ -5,7 +5,4 @@ extern void message()
     puts("preload.c: message");
 }
 
-extern void internal_message()
-{
-    puts("preload.c: internal_message");
-}
+extern void override_message() __attribute__((alias("message")));
